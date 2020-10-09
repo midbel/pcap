@@ -2,7 +2,7 @@ package pcap
 
 import (
 	"encoding/binary"
-  "errors"
+	"errors"
 	"io"
 	"time"
 )
@@ -39,20 +39,20 @@ func Decode(r io.Reader, fn func([]byte, Header) error) error {
 	if err := binary.Read(r, binary.LittleEndian, &top); err != nil {
 		return err
 	}
-  switch top.Magic {
-  case micro, nano:
-  default:
-    return ErrMagic
-  }
+	switch top.Magic {
+	case micro, nano:
+	default:
+		return ErrMagic
+	}
 	var (
 		hdr Header
 		buf []byte
 	)
 	for {
 		if err := binary.Read(r, binary.LittleEndian, &hdr); err != nil {
-      if errors.Is(err, io.EOF) {
-        return nil
-      }
+			if errors.Is(err, io.EOF) {
+				return nil
+			}
 			return err
 		}
 		if top.Magic == micro {
